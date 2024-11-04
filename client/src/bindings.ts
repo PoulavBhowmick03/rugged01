@@ -1,71 +1,62 @@
-interface Moves {
+interface PlayerBalance {
     fieldOrder: string[];
     player: string;
-    remaining: number;
-    last_direction: Direction;
-    can_move: boolean;
+    balance: bigint;
+    total_games: number;
+    wins: number;
+    losses: number;
 }
 
-interface DirectionsAvailable {
+interface PlatformFees {
+    fieldOrder: string[];
+    admin: string;
+    fee_percentage: number;
+}
+
+interface GameOutcome {
     fieldOrder: string[];
     player: string;
-    directions: Direction[];
-}
-
-interface Position {
-    fieldOrder: string[];
-    player: string;
-    vec: Vec2;
-}
-
-enum Direction {
-    None = "0",
-    Left = "1",
-    Right = "2",
-    Up = "3",
-    Down = "4",
-}
-
-interface Vec2 {
-    x: number;
-    y: number;
+    won: boolean;
+    amount_won: bigint;
 }
 
 type Schema = {
     dojo_starter: {
-        Moves: Moves;
-        DirectionsAvailable: DirectionsAvailable;
-        Position: Position;
+        PlayerBalance: PlayerBalance;
+        PlatformFees: PlatformFees;
+        GameOutcome: GameOutcome;
     };
 };
 
 enum Models {
-    Moves = "dojo_starter-Moves",
-    DirectionsAvailable = "dojo_starter-DirectionsAvailable",
-    Position = "dojo_starter-Position",
+    PlayerBalance = "dojo_starter-PlayerBalance",
+    PlatformFees = "dojo_starter-PlatformFees",
+    GameOutcome = "dojo_starter-GameOutcome",
 }
 
 const schema: Schema = {
     dojo_starter: {
-        Moves: {
-            fieldOrder: ["player", "remaining", "last_direction", "can_move"],
-            player: "",
-            remaining: 0,
-            last_direction: Direction.None,
-            can_move: false,
+        PlayerBalance: {
+            fieldOrder: ["player", "balance", "total_games", "wins", "losses"],
+            player: "" as string,
+            balance: BigInt(0),
+            total_games: 0,
+            wins: 0,
+            losses: 0,
         },
-        DirectionsAvailable: {
-            fieldOrder: ["player", "directions"],
-            player: "",
-            directions: [],
+        PlatformFees: {
+            fieldOrder: ["admin", "fee_percentage"],
+            admin: "" as string,
+            fee_percentage: 0,
         },
-        Position: {
-            fieldOrder: ["player", "vec"],
-            player: "",
-            vec: { x: 0, y: 0 },
+        GameOutcome: {
+            fieldOrder: ["player", "won", "amount_won"],
+            player: "" as string,
+            won: false,
+            amount_won: BigInt(0),
         },
     },
 };
 
-export type { Schema, Moves, DirectionsAvailable, Position, Vec2 };
-export { Direction, schema, Models };
+export type { Schema, PlayerBalance, PlatformFees, GameOutcome };
+export { schema, Models };

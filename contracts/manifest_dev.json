@@ -1121,12 +1121,12 @@
   },
   "contracts": [
     {
-      "address": "0x32ae31b916aa0528d040a31ce9ce6d8f3b5f87a93a39aa1a1c5fdee2c2dadad",
-      "class_hash": "0x436f2cc1c67462f7cce7f917a82c1e45870080eddf94e09609d8b72d52fd8c1",
+      "address": "0x72dc7982e0435056b7b8b45c85fa0055498e3951ebc784ff175191cecda05f5",
+      "class_hash": "0x19a3e2df224c2ac80ef08a7899d4162e87486fe1c937cce4cf0a2b9544486ec",
       "abi": [
         {
           "type": "impl",
-          "name": "actions__ContractImpl",
+          "name": "rugged__ContractImpl",
           "interface_name": "dojo::contract::interface::IContract"
         },
         {
@@ -1161,62 +1161,6 @@
                 }
               ],
               "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "ActionsImpl",
-          "interface_name": "dojo_starter::systems::actions::IActions"
-        },
-        {
-          "type": "enum",
-          "name": "dojo_starter::models::Direction",
-          "variants": [
-            {
-              "name": "None",
-              "type": "()"
-            },
-            {
-              "name": "Left",
-              "type": "()"
-            },
-            {
-              "name": "Right",
-              "type": "()"
-            },
-            {
-              "name": "Up",
-              "type": "()"
-            },
-            {
-              "name": "Down",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo_starter::systems::actions::IActions",
-          "items": [
-            {
-              "type": "function",
-              "name": "spawn",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "move",
-              "inputs": [
-                {
-                  "name": "direction",
-                  "type": "dojo_starter::models::Direction"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
             }
           ]
         },
@@ -1318,8 +1262,44 @@
           "variants": []
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "event",
-          "name": "dojo_starter::systems::actions::actions::Event",
+          "name": "dojo_starter::systems::actions::rugged::GamePlayed",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "player",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "key"
+            },
+            {
+              "name": "result",
+              "type": "core::bool",
+              "kind": "data"
+            },
+            {
+              "name": "amount",
+              "type": "core::integer::u128",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo_starter::systems::actions::rugged::Event",
           "kind": "enum",
           "variants": [
             {
@@ -1331,37 +1311,42 @@
               "name": "WorldProviderEvent",
               "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
               "kind": "nested"
+            },
+            {
+              "name": "GamePlayed",
+              "type": "dojo_starter::systems::actions::rugged::GamePlayed",
+              "kind": "nested"
             }
           ]
         }
       ],
       "init_calldata": [],
-      "tag": "dojo_starter-actions",
+      "tag": "dojo_starter-rugged",
       "systems": []
     }
   ],
   "models": [
     {
       "members": [],
-      "class_hash": "0x7ba1920c35f44c82d82d0ff47cbbf04e60226c28027b1a45731aa07bceea9d1",
-      "tag": "DirectionsAvailable"
+      "class_hash": "0x45175429ba96643dcccb52d3f080bf16bb8b6651f547915b3b8521c4eb41fbc",
+      "tag": "GameOutcome"
     },
     {
       "members": [],
-      "class_hash": "0x469117d9c5cac8ee02e521addae16a36da3571b2d977971395771d4c2db73e0",
-      "tag": "Moves"
+      "class_hash": "0x47f6aa79e0cd18f75368f7b3c5714e9d179ff1a30951d0343783c6c76486e96",
+      "tag": "PlatformFees"
     },
     {
       "members": [],
-      "class_hash": "0x445a1f5bdb78726083b9b577e775e066f6145f0240162d59f105a1251c2b016",
-      "tag": "Position"
+      "class_hash": "0x1796475568621d5ea605dc8e0667e750044f0231e77c59e2301680e2c2c43bf",
+      "tag": "PlayerBalance"
     }
   ],
   "events": [
     {
       "members": [],
-      "class_hash": "0x5f6b87c8f5260f907795382b962e1f04ab0e98b754b6946eedcee27921819a9",
-      "tag": "Moved"
+      "class_hash": "0x56d3c004e033f08c0994d7f57c7860a424115b535af0c9730897968fa665b74",
+      "tag": "GamePlayed"
     }
   ]
 }
