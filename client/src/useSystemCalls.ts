@@ -25,10 +25,10 @@ export const useSystemCalls = () => {
         }
     };
 
-    const playGame = async (betAmount: bigint) => {
+    const playGame = async () => {
         const entityId = generateEntityId();
         const transactionId = uuidv4();
-
+        const betAmount = BigInt(100);
         // Apply an optimistic update to the state
         state.applyOptimisticUpdate(transactionId, (draft) => {
             if (draft.entities[entityId]?.models?.dojo_starter?.PlayerBalance) {
