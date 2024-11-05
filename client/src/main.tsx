@@ -20,7 +20,7 @@ async function main() {
                 worldAddress: dojoConfig.manifest.world.address,
             },
             domain: {
-                name: "WORLD_NAME",
+                name: "dojo_starter-rugged",
                 version: "1.0",
                 chainId: "KATANA",
                 revision: "1",

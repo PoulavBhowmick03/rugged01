@@ -2,12 +2,13 @@
 import { DojoProvider } from "@dojoengine/core";
 import { Account } from "starknet";
 
-export type IClient = Awaited<ReturnType<typeof client>>;
+// export type IClient = Awaited<ReturnType<typeof client>>;
 
 export function client(provider: DojoProvider) {
+
     // System definitions for `rugged` contract
     function rugged() {
-        const contract_name = "rugged";
+        const contractName = "rugged";
 
         // Call the `initialize_platform_fees` system
         const initializePlatformFees = async (props: { account: Account; feePercentage: number }) => {
@@ -15,11 +16,11 @@ export function client(provider: DojoProvider) {
                 return await provider.execute(
                     props.account,
                     {
-                        contractName: contract_name,
+                        contractName: contractName,
                         entrypoint: "initialize_platform_fees",
-                        calldata: [props.feePercentage],
+                        calldata: [props.feePercentage.toString()],
                     },
-                    "dojo_starter"
+                    "dojo_starter-rugged"
                 );
             } catch (error) {
                 console.error("Error executing initialize_platform_fees:", error);
@@ -27,17 +28,25 @@ export function client(provider: DojoProvider) {
             }
         };
 
+        // Helper function to split u128 into two felts (lower and higher 64 bits)
+        const splitU128 = (value: bigint): [string, string] => {
+            const lower = value & BigInt("0xFFFFFFFFFFFFFFFF");
+            const higher = value >> BigInt(64);
+            return [lower.toString(), higher.toString()];
+        };
+
         // Call the `play_game` system
         const playGame = async (props: { account: Account; betAmount: bigint }) => {
             try {
+                const [lower, higher] = splitU128(props.betAmount);
                 return await provider.execute(
                     props.account,
                     {
-                        contractName: contract_name,
+                        contractName: contractName,
                         entrypoint: "play_game",
-                        calldata: [props.betAmount.toString()],
+                        calldata: [lower, higher],
                     },
-                    "dojo_starter"
+                    "dojo_starter-rugged"
                 );
             } catch (error) {
                 console.error("Error executing play_game:", error);

@@ -1121,8 +1121,8 @@
   },
   "contracts": [
     {
-      "address": "0x72dc7982e0435056b7b8b45c85fa0055498e3951ebc784ff175191cecda05f5",
-      "class_hash": "0x19a3e2df224c2ac80ef08a7899d4162e87486fe1c937cce4cf0a2b9544486ec",
+      "address": "0x713abfba1def06fdf708c288bf378371f4c7c8df8efbc825094cd6d966944d9",
+      "class_hash": "0xb706eec342492fd6ec21cc53ab493d3ffe653e888a0949e951a5e444e258fb",
       "abi": [
         {
           "type": "impl",
@@ -1161,6 +1161,36 @@
                 }
               ],
               "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "IHitThePlayImpl",
+          "interface_name": "dojo_starter::systems::actions::IHitThePlay"
+        },
+        {
+          "type": "interface",
+          "name": "dojo_starter::systems::actions::IHitThePlay",
+          "items": [
+            {
+              "type": "function",
+              "name": "initialize_platform_fees",
+              "inputs": [
+                {
+                  "name": "fee_percentage",
+                  "type": "core::integer::u8"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "play_game",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
             }
           ]
         },

@@ -10,47 +10,33 @@ import useModel from "./useModel";
 import { useSystemCalls } from "./useSystemCalls";
 import ControllerConnector from "@cartridge/connector";
 import { Chain, sepolia } from "@starknet-react/chains";
-
 import {
   StarknetConfig,
   starkscan,
+  jsonRpcProvider,
 } from "@starknet-react/core";
+import cartridgeConnector from "./cartridgeConnector";
 
 export const useDojoStore = createDojoStore<Schema>();
-function provider(_chain: Chain) {
+function provider() {
   return new RpcProvider({
     nodeUrl: "https://api.cartridge.gg/x/starknet/sepolia",
   });
 }
-const ETH_TOKEN_ADDRESS =
-    "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
 
 const connector = new ControllerConnector({
-  policies: [
-      {
-          target: ETH_TOKEN_ADDRESS,
-          method: "approve",
-          description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      },
-      {
-          target: ETH_TOKEN_ADDRESS,
-          method: "transfer",
-      },
-      // Add more policies as needed
-  ],
   rpc: "https://api.cartridge.gg/x/starknet/sepolia",
-  // Uncomment to use a custom theme
-  // theme: "dope-wars",
-  // colorMode: "light"
 });
+
 type VideoRefType = React.RefObject<HTMLVideoElement>;
 
 function App({ sdk }: { sdk: SDK<Schema> }) {
   const {
     account,
+    setup: { client },
   } = useDojo();
   const state = useDojoStore((state) => state);
+  const entities = useDojoStore((state) => state.entities);
 
   const { playGame } = useSystemCalls();
 
@@ -163,14 +149,13 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
   const [showPopup, setShowPopup] = useState<boolean>(true);
   const bgVideoRef: VideoRefType = useRef<HTMLVideoElement>(null);
 
-  const handleClick = async (): Promise<void> => {
+  const handlePlay = async (): Promise<void> => {
     setIsClicked(true);
     setIsHovered(false);
 
     try {
-      // Call playGame system call with a bet amount, e.g., 1000
-      await playGame(BigInt(1000));
-      // UI will update based on the gameOutcome model when it changes
+      // Call playGame system call
+      await playGame(BigInt(100));
     } catch (error) {
       console.error("Error playing game:", error);
     }
@@ -206,6 +191,15 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
     setOutcomeVideo("");
   };
 
+  const handlePopupClose = (): void => {
+    setShowPopup(false);
+    if (bgVideoRef.current) {
+      bgVideoRef.current.muted = false;
+      bgVideoRef.current.play().catch((error) => {
+        console.error("Error playing video:", error);
+      });
+    }
+  };
 
   const handlePopupConnect = async (): Promise<void> => {
     setShowPopup(false);
@@ -229,6 +223,7 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
     <StarknetConfig
       autoConnect
       chains={[sepolia]}
+      connectors={[cartridgeConnector]}
       explorer={starkscan}
       provider={provider}
     >
@@ -269,7 +264,7 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
                   d="M1197,704c0-9.128,5.19-9,9-9h84c5.13,0,11,1.027,11,11v65c0,10.313-8.05,11-11,11h-76c-7.89,0-15-2.564-15-11C1199,761.18,1197,713.128,1197,704Z"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
-                  onClick={handleClick}
+                  onClick={handlePlay}
                 />
               </g>
             </svg>

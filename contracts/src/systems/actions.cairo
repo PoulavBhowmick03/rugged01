@@ -6,7 +6,7 @@ use dojo_starter::models::GameOutcome;
 #[starknet::interface]
 trait IHitThePlay<T> {
     fn initialize_platform_fees(ref self: T, fee_percentage: u8);
-    fn play_game(ref self: T, bet_amount: u128);
+    fn play_game(ref self: T);
 }
 
 // Dojo decorator
@@ -36,21 +36,22 @@ pub mod rugged {
         amount: u128, // Amount won/lost
     }
 
+
+    #[abi(embed_v0)]
     impl IHitThePlayImpl of IHitThePlay<ContractState> {
         fn initialize_platform_fees(ref self: ContractState, fee_percentage: u8) {
             let admin = get_caller_address();
-            let mut world = self.world(@"dojo_starter");
-            // Create and set platform fees
+            let mut world = self.world(@"dojo_starter-rugged");
             world.write_model(@PlatformFees { admin, fee_percentage });
         }
 
-        fn play_game(ref self: ContractState, bet_amount: u128) {
+        fn play_game(ref self: ContractState) {
             let player = get_caller_address();
-            let mut world = self.world(@"dojo_starter");
+            let mut world = self.world(@"dojo_starter-rugged");
 
             // Get player balance or initialize new one
             let mut player_balance: PlayerBalance = world.read_model(player);
-
+            let bet_amount: u128 = 100;
             // Ensure the player has enough balance
             assert(player_balance.balance >= bet_amount, 'Insufficient balance');
 
@@ -62,10 +63,8 @@ pub mod rugged {
             let block_timestamp: felt252 = get_block_timestamp().into();
 
             // Use Poseidon hash to generate a seed
-            let seed = PoseidonTrait::new()
-                .update(block_timestamp)
-                .finalize();
-            
+            let seed = PoseidonTrait::new().update(block_timestamp).finalize();
+
             // Convert seed to u128 safely
             let seed_u128: u128 = seed.try_into().unwrap_or(0_u128);
             let random_value = seed_u128 % 10_u128;
@@ -77,7 +76,7 @@ pub mod rugged {
             if won {
                 // Get platform fees
                 let fees: PlatformFees = world.read_model(player);
-                let fee_percentage: u128 = fees.fee_percentage.into();
+                let fee_percentage: u128 = 10;
                 let fee_deduction = (bet_amount * fee_percentage) / 100_u128;
                 amount_won = bet_amount * 2_u128 - fee_deduction;
 
@@ -89,11 +88,7 @@ pub mod rugged {
             }
 
             // Update world state
-            let game_outcome = GameOutcome {
-                player,
-                won,
-                amount_won,
-            };
+            let game_outcome = GameOutcome { player, won, amount_won, };
             world.write_model(@game_outcome);
 
             let player_balance = PlayerBalance {

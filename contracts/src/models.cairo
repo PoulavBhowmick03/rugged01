@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct PlayerBalance {
     #[key]
@@ -11,7 +11,7 @@ pub struct PlayerBalance {
     pub losses: u64,        // Total losses
 }
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct PlatformFees {
     #[key]
@@ -19,7 +19,7 @@ pub struct PlatformFees {
     pub fee_percentage: u8, // Platform fee percentage, e.g., 20
 }
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct GameOutcome {
     #[key]
