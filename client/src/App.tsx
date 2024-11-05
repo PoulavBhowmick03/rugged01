@@ -9,11 +9,10 @@ import { useDojo } from "./useDojo";
 import useModel from "./useModel";
 import { useSystemCalls } from "./useSystemCalls";
 import ControllerConnector from "@cartridge/connector";
-import { Chain, sepolia } from "@starknet-react/chains";
+import { sepolia } from "@starknet-react/chains";
 import {
   StarknetConfig,
   starkscan,
-  jsonRpcProvider,
 } from "@starknet-react/core";
 import cartridgeConnector from "./cartridgeConnector";
 
@@ -33,10 +32,8 @@ type VideoRefType = React.RefObject<HTMLVideoElement>;
 function App({ sdk }: { sdk: SDK<Schema> }) {
   const {
     account,
-    setup: { client },
   } = useDojo();
   const state = useDojoStore((state) => state);
-  const entities = useDojoStore((state) => state.entities);
 
   const { playGame } = useSystemCalls();
 
@@ -155,7 +152,7 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
 
     try {
       // Call playGame system call
-      await playGame(BigInt(100));
+      await playGame();
     } catch (error) {
       console.error("Error playing game:", error);
     }
@@ -191,15 +188,6 @@ function App({ sdk }: { sdk: SDK<Schema> }) {
     setOutcomeVideo("");
   };
 
-  const handlePopupClose = (): void => {
-    setShowPopup(false);
-    if (bgVideoRef.current) {
-      bgVideoRef.current.muted = false;
-      bgVideoRef.current.play().catch((error) => {
-        console.error("Error playing video:", error);
-      });
-    }
-  };
 
   const handlePopupConnect = async (): Promise<void> => {
     setShowPopup(false);
