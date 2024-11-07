@@ -1,23 +1,25 @@
+import { useContext } from 'react';
+import { DojoContext } from './DojoContext';
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojoStore } from "./App";
-import { useDojo } from "./useDojo";
 import { v4 as uuidv4 } from "uuid";
 
 export const useSystemCalls = () => {
+    const context = useContext(DojoContext);
+    if (!context) {
+        throw new Error('useSystemCalls must be used within a DojoContextProvider');
+    }
+
+    const { systemCalls, account } = context;
     const state = useDojoStore((state) => state);
 
-    const {
-        setup: { client },
-        account: { account },
-    } = useDojo();
-
     const generateEntityId = () => {
-        return getEntityIdFromKeys([BigInt(account?.address)]);
+        return getEntityIdFromKeys([BigInt(account.account.address)]);
     };
 
     const initializePlatformFees = async (feePercentage: number) => {
         try {
-            await client.rugged.initializePlatformFees({ account, feePercentage });
+            await systemCalls.rugged.initializePlatformFees(account.account, feePercentage);
             console.log("Platform fees initialized successfully");
         } catch (error) {
             console.error("Error initializing platform fees:", error);
@@ -41,7 +43,7 @@ export const useSystemCalls = () => {
         });
 
         try {
-            await client.rugged.playGame({ account, betAmount });
+            await systemCalls.rugged.playGame(account.account);
 
             // Wait for the entity to be updated with the new state
             await state.waitForEntityChange(entityId, (entity) => {

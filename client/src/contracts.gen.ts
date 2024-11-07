@@ -8,7 +8,7 @@ export function client(provider: DojoProvider) {
 
     // System definitions for `rugged` contract
     function rugged() {
-        const contractName = "rugged";
+        const contractName = "dojo_starter-rugged";
 
         // Call the `initialize_platform_fees` system
         const initializePlatformFees = async (props: { account: Account; feePercentage: number }) => {
@@ -28,23 +28,15 @@ export function client(provider: DojoProvider) {
             }
         };
 
-        // Helper function to split u128 into two felts (lower and higher 64 bits)
-        const splitU128 = (value: bigint): [string, string] => {
-            const lower = value & BigInt("0xFFFFFFFFFFFFFFFF");
-            const higher = value >> BigInt(64);
-            return [lower.toString(), higher.toString()];
-        };
-
-        // Call the `play_game` system
-        const playGame = async (props: { account: Account; betAmount: bigint }) => {
+        const playGame = async (props: { account: Account }) => { 
             try {
-                const [lower, higher] = splitU128(props.betAmount);
+                console.log(props.account);              
                 return await provider.execute(
-                    props.account,
+                    props.account,                    
                     {
                         contractName: contractName,
                         entrypoint: "play_game",
-                        calldata: [lower, higher],
+                        calldata: [], // No parameters
                     },
                     "dojo_starter-rugged"
                 );

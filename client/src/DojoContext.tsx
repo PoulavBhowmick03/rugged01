@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useMemo } from "react";
+
+import { createContext, ReactNode, useContext, useMemo, useState, useEffect } from "react";
 import {
     BurnerAccount,
     BurnerManager,
@@ -7,11 +8,11 @@ import {
 import { Account } from "starknet";
 import { dojoConfig } from "../dojoConfig";
 import { DojoProvider } from "@dojoengine/core";
-import { client } from "./contracts.gen";
+import { setupWorld } from "./bindings/contracts.gen";
 
 interface DojoContextType {
     masterAccount: Account;
-    client: ReturnType<typeof client>;
+    systemCalls: Awaited<ReturnType<typeof setupWorld>>;
     account: BurnerAccount;
 }
 
@@ -47,11 +48,21 @@ export const DojoContextProvider = ({
 
     const burnerManagerData = useBurnerManager({ burnerManager });
 
+    const [systemCalls, setSystemCalls] = useState<Awaited<ReturnType<typeof setupWorld>> | null>(null);
+
+    useEffect(() => {
+        setupWorld(dojoProvider).then(setSystemCalls);
+    }, [dojoProvider]);
+
+    if (!systemCalls) {
+        return null; // or a loading indicator
+    }
+
     return (
         <DojoContext.Provider
             value={{
                 masterAccount,
-                client: client(dojoProvider),
+                systemCalls,
                 account: {
                     ...burnerManagerData,
                     account: burnerManagerData.account || masterAccount,

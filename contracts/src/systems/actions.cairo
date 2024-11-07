@@ -53,10 +53,10 @@ pub mod rugged {
             let mut player_balance: PlayerBalance = world.read_model(player);
             let bet_amount: u128 = 100;
             // Ensure the player has enough balance
-            assert(player_balance.balance >= bet_amount, 'Insufficient balance');
+            // assert(player_balance.balance >= bet_amount, 'Insufficient balance');
 
             // Deduct bet amount from player balance
-            player_balance.balance -= bet_amount;
+            // player_balance.balance -= bet_amount;
             player_balance.total_games += 1;
 
             // Generate pseudo-random number using block timestamp and player address

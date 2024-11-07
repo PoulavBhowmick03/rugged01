@@ -8,7 +8,7 @@ import { Models, Schema } from "./bindings";
 import { useDojo } from "./useDojo";
 import useModel from "./useModel";
 import { useSystemCalls } from "./useSystemCalls";
-import ControllerConnector from "@cartridge/connector";
+import Connector from "@cartridge/connector";
 import { sepolia } from "@starknet-react/chains";
 import {
   StarknetConfig,
@@ -22,8 +22,14 @@ function provider() {
     nodeUrl: "https://api.cartridge.gg/x/starknet/sepolia",
   });
 }
-
-const connector = new ControllerConnector({
+const contract_address = "0x101face0e6e0f12425056a53fb84f0c7b55863bbff22c0e2a0cfa82836c0067"
+const connector = new Connector({
+  policies: [
+    {
+        target: contract_address,
+        method: "play_game",
+    }
+],
   rpc: "https://api.cartridge.gg/x/starknet/sepolia",
 });
 
