@@ -5,13 +5,13 @@ import App from "./App.tsx";
 
 import "./index.css";
 import { init } from "@dojoengine/sdk";
-import { Schema, schema } from "./bindings.ts";
+import { DojoStarterSchemaType, schema } from "./bindings/models.gen.ts";
 import { dojoConfig } from "../dojoConfig.ts";
 import { DojoContextProvider } from "./DojoContext.tsx";
 import { setupBurnerManager } from "@dojoengine/create-burner";
 
 async function main() {
-    const sdk = await init<Schema>(
+    const sdk = await init<DojoStarterSchemaType>(
         {
             client: {
                 rpcUrl: dojoConfig.rpcUrl,
