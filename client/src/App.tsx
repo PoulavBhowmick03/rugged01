@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { SDK, createDojoStore } from "@dojoengine/sdk";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+// import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { RpcProvider } from "starknet";
 import "./styles/App.css";
 import { DojoStarterSchemaType, GameOutcome, PlayerBalance, schema } from "./bindings/models.gen";
@@ -43,10 +43,10 @@ function App({ sdk }: { sdk: SDK<DojoStarterSchemaType> }) {
 
   const { playGame } = useSystemCalls();
 
-  const entityId = useMemo(
-    () => getEntityIdFromKeys([BigInt(account?.account.address)]),
-    [account?.account.address]
-  );
+  // const entityId = useMemo(
+  //   () => getEntityIdFromKeys([BigInt(account?.account.address)]),
+  //   [account?.account.address]
+  // );
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
@@ -102,8 +102,8 @@ function App({ sdk }: { sdk: SDK<DojoStarterSchemaType> }) {
 
   // const playerBalance = useModel(entityId, "PlayerBalance");
   // const gameOutcome = useModel(entityId, "GameOutcome");
-  const [playerBalance, setPlayerBalance] = useState<PlayerBalance | null>(null);
-  const [gameOutcome, setGameOutcome] = useState<GameOutcome | null>(null);
+  const [playerBalance] = useState<PlayerBalance | null>(null);
+  const [gameOutcome] = useState<GameOutcome | null>(null);
     const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [showOutcome, setShowOutcome] = useState<boolean>(false);

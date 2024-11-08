@@ -1,5 +1,5 @@
 import { useDojo } from './useDojo';
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+// import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useDojoStore } from "../App";
 import { v4 as uuidv4 } from "uuid";
 import { Account } from 'starknet';
